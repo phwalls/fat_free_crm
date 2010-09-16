@@ -240,6 +240,12 @@ tt {
   font-size: 12px;
   margin: 8px 0px 0px 0px; }
 
+.keywords {
+  color: #3f3f3f;
+  font-size: 10px;
+  font-variant: small-caps;
+}
+
 .top {
   margin: 5px 0px 0px 0px; }
 

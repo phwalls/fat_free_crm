@@ -16,7 +16,7 @@
 #------------------------------------------------------------------------------
 
 # == Schema Information
-# Schema version: 27
+# Schema version: 30
 #
 # Table name: accounts
 #
@@ -34,6 +34,7 @@
 #  updated_at      :datetime
 #  email           :string(64)
 #  background_info :string(255)
+#  keywords         :string(1000)
 #
 class Account < ActiveRecord::Base
   belongs_to  :user

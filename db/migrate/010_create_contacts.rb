@@ -1,3 +1,4 @@
+
 class CreateContacts < ActiveRecord::Migration
   def self.up
     create_table :contacts, :force => true do |t|

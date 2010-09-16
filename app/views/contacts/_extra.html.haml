@@ -14,6 +14,10 @@
         %td{ :valign => :top }
           .label #{t :department}:
           = f.text_field :department, :style => "width:240px"
+        %td= spacer
+        %td{ :valign => :top }
+          .label #{t :keywords}:
+          = f.text_field :keywords, :style => "width:240px"
       %tr
         %td{ :valign => :top }
           .label #{t :alt_email}:
@@ -22,6 +26,10 @@
         %td{ :valign => :top }
           .label #{t :mobile}:
           = f.text_field :mobile, :style => "width:240px"
+        %td= spacer
+        %td{ :valign => :top }
+          .label #{t :company1}:
+          = f.text_field :company1, :style => "width:240px"
       %tr
         %td{ :valign => :top }
           = render :partial => "common/address", :locals => { :f => f, :asset => @contact, :type => 'business', :title => :address }
@@ -29,7 +37,13 @@
         %td{ :valign => :top }
           .label #{t :fax}:
           = f.text_field :fax, :style => "width:240px"
+          .label Full Brokercode:
+          = f.text_field :background_info, :style => "width:240px"
           %div{:style => "margin-top:6px"}
             .check_box
               = f.check_box :do_not_call, {}, true
               #{t :do_not_call}
+        %td= spacer
+        %td{ :valign => :top }
+          .label #{t :company2}:
+          = f.text_field :company2, :style => "width:240px"

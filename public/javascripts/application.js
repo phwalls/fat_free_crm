@@ -388,6 +388,27 @@ var crm = {
   },
 
   //----------------------------------------------------------------------------
+  searchkw: function(query, controller) {
+    if (!this.request) {
+      var list = controller;          // ex. "users"
+      if (list.indexOf("/") >= 0) {   // ex. "admin/users"
+        list = list.split("/")[1];
+      }
+      $("loading").show();
+      $(list).setStyle({ opacity: 0.4 });
+      new Ajax.Request(this.base_url + "/" + controller + "/searchkw", {
+        method     : "get",
+        parameters : { query : query },
+        onSuccess  : function() {
+          $("loading").hide();
+          $(list).setStyle({ opacity: 1 });
+        },
+        onComplete : (function() { this.request = null; }).bind(this)
+      });
+    }
+  },
+
+//----------------------------------------------------------------------------
   jumper: function(controller) {
     var name = controller.capitalize();
     $$("#jumpbox_menu a").each(function(link) {

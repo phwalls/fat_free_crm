@@ -20,6 +20,8 @@
       - if contact.lead and contact.lead.referred_by?
         &ndash;
         = #{t :referred_by_small} #{contact.lead.referred_by}"
+    .keywords
+      = contact.keywords unless contact.keywords.blank?
     - unless @current_user.preference[:contacts_outline] == "brief"
       %dt{ :style => "padding: 2px 0px 0px 0px" }
         = link_to_email(contact.email) << " | " if contact.email.present?

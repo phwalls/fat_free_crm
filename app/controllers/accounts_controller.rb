@@ -156,6 +156,17 @@ class AccountsController < ApplicationController
     end
   end
 
+  # GET /accounts/searchkw/query                                             AJAX
+  #----------------------------------------------------------------------------
+  def searchkw
+    @accounts = get_accountskw(:query => params[:query], :page => 1)
+
+    respond_to do |format|
+      format.js   { render :action => :index }
+      format.xml  { render :xml => @accounts.to_xml }
+    end
+  end
+
   # PUT /accounts/1/attach
   # PUT /accounts/1/attach.xml                                             AJAX
   #----------------------------------------------------------------------------
@@ -196,6 +207,8 @@ class AccountsController < ApplicationController
     self.current_page = options[:page] if options[:page]
     self.current_query = options[:query] if options[:query]
 
+    print("Hello from get accounts ",current_query)
+
     records = {
       :user => @current_user,
       :order => @current_user.pref[:accounts_sort_by] || Account.sort_by
@@ -214,6 +227,40 @@ class AccountsController < ApplicationController
       Account.my(records)
     else
       Account.my(records).search(current_query)
+    end.paginate(pages)
+  end
+
+  #----------------------------------------------------------------------------
+  def get_accountskw(options = { :page => nil, :query => nil })
+    self.current_page = options[:page] if options[:page]
+    self.current_query = options[:query] if options[:query]
+
+    records = {
+      :user => @current_user,
+      :order => @current_user.pref[:accounts_sort_by] || Account.sort_by
+    }
+    pages = {
+      :page => current_page,
+      :per_page => @current_user.pref[:accounts_per_page]
+    }
+
+    # Call :get_accounts hook and return its output if any.
+    accounts = hook(:get_accounts, self, :records => records, :pages => pages)
+    return accounts.last unless accounts.empty?
+    
+    # Default processing if no :get_accounts hooks are present.
+    if current_query.blank?
+      Account.my(records)
+    else
+      conditionstr = ""
+      splitstring = current_query.split(",")
+      splitstring.length.times do |i|
+        conditionstr += " keywords LIKE '%"+splitstring[i]+"%' OR "
+      end
+      # Remove the final 3 characters 'OR '
+      conditionstr = conditionstr.slice(0,conditionstr.length-3)
+      printf("%s\n", conditionstr)
+   Account.find(:all, :conditions => conditionstr )
     end.paginate(pages)
   end
 

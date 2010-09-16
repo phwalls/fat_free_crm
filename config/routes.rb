@@ -39,7 +39,8 @@ ActionController::Routing::Routes.draw do |map|
         :auto_complete => :post,
         :options => :get,
         :redraw  => :post,
-        :search  => :get
+        :search  => :get,
+        :searchkw => :get
       },
       :member => {
         :attach  => :put,

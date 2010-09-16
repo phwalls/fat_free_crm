@@ -1,0 +1,9 @@
+- edit ||= false
+- collapsed = (@account.errors.empty? && session[:keywords].nil?)
+= subtitle :keywords, collapsed, t("Keywords")
+.section
+  %small#account_keyword_intro{ hidden_if(!collapsed) }
+    = t(:intro, t(:lead_small)) unless edit
+  #account_keyword{ hidden_if(collapsed) }
+    .label Keywords
+    = f.text_field :keywords, :style => "width:240px"

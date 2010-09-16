@@ -191,6 +191,17 @@ class ContactsController < ApplicationController
     end
   end
 
+  # GET /contacts/searchkw/query                                             AJAX
+  #----------------------------------------------------------------------------
+  def searchkw
+    @contacts = get_contactskw(:query => params[:query], :page => 1)
+
+    respond_to do |format|
+      format.js   { render :action => :index }
+      format.xml  { render :xml => @contacts.to_xml }
+    end
+  end
+
   # GET /contacts/options                                                  AJAX
   #----------------------------------------------------------------------------
   def options
@@ -248,6 +259,40 @@ class ContactsController < ApplicationController
       Contact.my(records)
     else
       Contact.my(records).search(current_query)
+    end.paginate(pages)
+  end
+
+  #----------------------------------------------------------------------------
+  def get_contactskw(options = { :page => nil, :query => nil })
+    self.current_page = options[:page] if options[:page]
+    self.current_query = options[:query] if options[:query]
+
+    records = {
+      :user => @current_user,
+      :order => @current_user.pref[:contactss_sort_by] || Contact.sort_by
+    }
+    pages = {
+      :page => current_page,
+      :per_page => @current_user.pref[:contacts_per_page]
+    }
+
+    # Call :get_contacts hook and return its output if any.
+    contacts = hook(:get_contactskw, self, :records => records, :pages => pages)
+    return contacts.last unless contacts.empty?
+
+    # Default processing if no :get_contacts hooks are present.
+    if current_query.blank?
+      Contact.my(records)
+    else
+      conditionstr = ""
+      splitstring = current_query.split(",")
+      splitstring.length.times do |i|
+        conditionstr += " keywords LIKE '%"+splitstring[i]+"%' OR "
+      end
+      # Remove the final 3 characters 'OR '
+      conditionstr = conditionstr.slice(0,conditionstr.length-3)
+      printf("%s\n", conditionstr)
+      Contact.find(:all, :conditions => conditionstr )
     end.paginate(pages)
   end
 

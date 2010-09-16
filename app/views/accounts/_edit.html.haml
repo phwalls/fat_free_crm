@@ -4,6 +4,7 @@
     = f.hidden_field :user_id
     = f.error_messages
     = render :partial => "accounts/top_section",  :locals => { :f => f, :edit => true }
+    = render :partial => "accounts/keywords", :locals => { :f => f, :edit => true }
     = render :partial => "accounts/contact_info", :locals => { :f => f, :edit => true }
     = render :partial => "accounts/permissions",  :locals => { :f => f, :edit => true }
     .buttonbar

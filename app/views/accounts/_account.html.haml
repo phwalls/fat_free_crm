@@ -15,6 +15,8 @@
     %tt
       = account.location << ", " unless account.location.blank?
       = t(:added_by, :time_ago => time_ago_in_words(account.created_at), :user => (account.user.id == @current_user.id ? t(:me) : h(account.user.full_name)))
+    .keywords
+      = account.keywords unless account.keywords.blank?
     - unless @current_user.preference[:accounts_outline] == "brief"
       %dt
         = link_to(account.website, account.website.to_url) << " | " if account.website.present?
