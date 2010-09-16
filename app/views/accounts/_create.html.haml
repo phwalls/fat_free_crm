@@ -4,6 +4,7 @@
   = f.error_messages
   = render :partial => "accounts/top_section",  :locals => { :f => f }
   = render :partial => "accounts/contact_info", :locals => { :f => f }
+  = render :partial => "accounts/keywords", :locals => { :f => f }
   = render :partial => "accounts/permissions",  :locals => { :f => f }
   .buttonbar
     - if Setting.compound_address
